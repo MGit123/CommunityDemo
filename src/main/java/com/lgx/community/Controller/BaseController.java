@@ -1,6 +1,7 @@
 package com.lgx.community.Controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * @author admin
@@ -10,6 +11,9 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class BaseController {
 
-
+   @RequestMapping("/")
+    public String index(){
+       return "index";
+   }
 
 }
