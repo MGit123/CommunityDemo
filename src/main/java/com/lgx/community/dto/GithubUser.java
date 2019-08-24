@@ -14,5 +14,6 @@ public class GithubUser {
 
     private String login;
     private Long id;
+    private String avatar_url;
 
 }

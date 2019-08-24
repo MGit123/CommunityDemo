@@ -6,9 +6,8 @@
     <link rel="stylesheet" href="css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="css/community.css" >
     <script src="js/bootstrap.min.js" type="application/javascript"></script>
-    <title>个人社区</title>
+    <title>发布</title>
 </head>
-
 <body>
 <nav class="navbar navbar-default">
     <div class="container-fluid">
@@ -18,7 +17,7 @@
                     data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                 <span class="sr-only">我的社区</span>
             </button>
-            <a class="navbar-brand" href="#">我的社区</a>
+            <a class="navbar-brand" href="/">首页</a>
         </div>
 
 
@@ -30,10 +29,9 @@
                 <button type="submit" class="btn btn-default">Submit</button>
             </form>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="/publish" >发布</a></li>
                 <li class="dropdown" th:if="${session.user!=null}">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false" th:text="${session.user.getName()}">我<span class="caret"></span></a>
+                       aria-expanded="false" th:text="${session.user.getLogin()}">我<span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="#">消息中心</a></li>
                         <li><a href="#">个人信息</a></li>
@@ -50,23 +48,31 @@
 <div class="container-fluid main">
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
-            <h2><span class="glyphicon glyphicon-list" aria-hidden="true" style="margin-right:10px;"></span>发现</h2>
+            <h2><span class="glyphicon glyphicon-plus" aria-hidden="true" style="margin-right:10px;"></span>发起</h2>
             <hr>
-            <div class="media">
-                <div class="media-left">
-                    <a href="#">
-                        <img class="media-object img-around" src="images/1.jpg" alt="个人头像">
-                    </a>
+
+            <form action="/publish" method="post">
+                <div class="form-group">
+                    <label for="title">问题标题（简明扼要）：</label>
+                    <input type="text" class="form-control" id="title" placeholder="问题标题">
                 </div>
-                <div class="media-body">
-                    <h4 class="media-heading">Spring Boot 快速开发</h4>
-                    点击进入查看视频<br>
-                    <span class="text-info">查看5 收藏0 点赞1</span>
+                <div class="form-group">
+                    <label for="description">问题补充（必填，请参照右侧提示）：</label>
+                    <textarea class="form-control" name="description" id="description" cols="12" rows="30"></textarea>
                 </div>
-            </div>
+                <div class="form-group">
+                    <label for="tag">添加标签：</label>
+                    <input type="text" class="form-control" id="tag" name="tag" placeholder="输入标签，以示分隔">
+                </div>
+
+                <button type="button" class="btn btn-success" style="float:right; margin-bottom:15px;">发布</button>
+
+            </form>
         </div>
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-            <h2>热门评论</h2>
+            <h2>问题发起指南</h2>
+            .问题标题：请用精准的语言描述您发布的问题，字数不超过25<br>
+            .问题补充：详细描述问题内容
 
         </div>
     </div>

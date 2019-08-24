@@ -1,0 +1,19 @@
+body{
+    background-color: #efefef;
+}
+
+.main{
+    background-color: #ffffff;
+    margin:30px;
+}
+
+.img-around{
+    margin:5px;
+    width:45px;
+    height:45px;
+}
+
+.text-info{
+    color:gray;
+    font-size: 12px;
+}

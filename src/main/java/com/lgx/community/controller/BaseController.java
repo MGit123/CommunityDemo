@@ -2,16 +2,23 @@ package com.lgx.community.controller;
 
 import com.lgx.community.dto.AccessTokenDTO;
 import com.lgx.community.dto.GithubUser;
+import com.lgx.community.entity.User;
+import com.lgx.community.mapper.UserMapper;
 import com.lgx.community.provider.GithubProvider;
+import com.lgx.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.UUID;
 
 /**
  * @author admin
@@ -24,6 +31,11 @@ public class BaseController {
     @Autowired
     private GithubProvider githubProvider;
 
+
+
+    @Autowired
+    private UserService userService;
+
     @Value("${github.client.id}")
     private String clientId;
 
@@ -33,15 +45,29 @@ public class BaseController {
     @Value("${github.redirect.url}")
     private String redirectUrl;
 
-   @RequestMapping("/")
-    public String index(){
+   @GetMapping("/")
+    public String index(HttpServletRequest request){
+
+       Cookie[] cookies=request.getCookies();
+       for(Cookie cookie:cookies){
+           if(cookie.getName().equals("token")){
+               String token=cookie.getValue();
+               User user=userService.findByToken(token);
+               if(user!=null){
+                   System.err.println("user:"+user);
+                   request.getSession().setAttribute("user",user);
+               }
+               break;
+           }
+       }
+
        return "index";
    }
 
    @GetMapping("/callback")
     public String callback(@RequestParam(name="code")String code,
                            @RequestParam(name="state")String state,
-                           HttpServletRequest request){
+                           HttpServletResponse response){
 
        AccessTokenDTO accessTokenDTO=new AccessTokenDTO();
        accessTokenDTO.setClient_id(clientId);
@@ -52,16 +78,37 @@ public class BaseController {
        String accessToken=githubProvider.getAccessToken(accessTokenDTO);
 
        //获取user
-       GithubUser user=githubProvider.getUser(accessToken);
-       System.err.println("username:"+user.getLogin());
+       GithubUser githubUser=githubProvider.getUser(accessToken);
+       System.err.println("username:"+githubUser.getLogin());
 
-       if(user!=null){
-           request.getSession().setAttribute("user",user);
+       if(githubUser!=null){
+           User user=new User();
+           user.setName(githubUser.getLogin());
+           user.setAccountId(String.valueOf(githubUser.getId()));
+           String token=UUID.randomUUID().toString();
+           user.setToken(token);
+           user.setGmtCreate(System.currentTimeMillis());
+           user.setGmtModified(user.getGmtCreate());
+           user.setAvatarUrl(githubUser.getAvatar_url());
+           userService.insert(user);
+
+           //request.getSession().setAttribute("user",githubUser);
+           response.addCookie(new Cookie("token",token));
            return "redirect:/";
        }else{
            return "redirect:/";
        }
-
    }
+
+    @GetMapping("/publish")
+    public String publish() {
+        return "publish";
+    }
+
+    @PostMapping("/publish")
+    public String publishInfo(){
+       return "/";
+    }
+
 
 }
