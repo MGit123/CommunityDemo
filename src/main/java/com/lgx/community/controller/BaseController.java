@@ -2,6 +2,8 @@ package com.lgx.community.controller;
 
 import com.lgx.community.dto.AccessTokenDTO;
 import com.lgx.community.dto.GithubUser;
+import com.lgx.community.dto.PaginationDTO;
+import com.lgx.community.dto.QuestionDTO;
 import com.lgx.community.entity.Question;
 import com.lgx.community.entity.User;
 import com.lgx.community.provider.GithubProvider;
@@ -51,7 +53,9 @@ public class BaseController {
     private String redirectUrl;
 
    @GetMapping("/")
-    public String index(HttpServletRequest request, Model model){
+    public String index(HttpServletRequest request, Model model,
+                        @RequestParam(name="page",defaultValue ="1") Integer page,
+                        @RequestParam(name="size",defaultValue ="5") Integer size){
 
        Cookie[] cookies=request.getCookies();
        if(cookies!=null){
@@ -68,8 +72,8 @@ public class BaseController {
          }
        }
 
-       List<Question> questionList=questionService.list();
-       model.addAttribute("questionList",questionList);
+       PaginationDTO paginationDTO=questionService.list(page,size);
+       model.addAttribute("pagination",paginationDTO);
 
        return "index";
    }
