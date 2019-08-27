@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" content="text/css;charset=UTF-8">
+    <link rel="stylesheet" href="/css/bootstrap.min.css" >
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/community.css" >
+    <script src="/js/jquery.min.js" type="application/javascript"></script>
+    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+    <title>Title</title>
+</head>
+<body>
+<div th:insert="~{head::nav}"></div>
+
+<div class="container-fluid main">
+    <div class="row">
+
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+            <h3><span th:text="${sectionName}"></span></h3>
+            <hr>
+        </div>
+
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+
+            <div class="list-group" style="margin-top:25px;">
+                <a href="/profile/questions" th:class="${section=='questions'}?'list-group-item active':'list-group-item'">我的问题</a>
+                <a href="/profile/repies" th:class="${section=='repies'}?'list-group-item active':'list-group-item'">
+                    最新回复 <span class="badge">3</span></a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
