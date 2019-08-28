@@ -55,7 +55,6 @@ public class BaseController {
 
        PaginationDTO paginationDTO=questionService.list(page,size);
        model.addAttribute("pagination",paginationDTO);
-
        return "index";
    }
 
@@ -87,11 +86,8 @@ public class BaseController {
            user.setAccountId(String.valueOf(githubUser.getId()));
            String token=UUID.randomUUID().toString();
            user.setToken(token);
-           user.setGmtCreate(System.currentTimeMillis());
-           user.setGmtModified(user.getGmtCreate());
            user.setAvatarUrl(githubUser.getAvatar_url());
-           userService.insert(user);
-
+           userService.createOrUpdate(user);
            //request.getSession().setAttribute("user",githubUser);
            response.addCookie(new Cookie("token",token));
            return "redirect:/";
@@ -102,18 +98,13 @@ public class BaseController {
 
 
 
-    @RequestMapping("logout")
+    @RequestMapping("/logout")
     public String logout(HttpServletRequest request,HttpServletResponse response){
 
-        Cookie[] cookies=request.getCookies();
-        if(cookies!=null){
-            for(Cookie cookie:cookies) {
-                if (cookie.getName().equals("token")) {
-                   cookie.setMaxAge(0);
-                    break;
-                }
-            }
-        }
+       request.getSession().removeAttribute("user");
+       Cookie cookie=new Cookie("token",null);
+       cookie.setMaxAge(0);
+       response.addCookie(cookie);
        return "redirect:/";
 
     }
