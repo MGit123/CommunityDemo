@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" content="text/css;charset=UTF-8">
+    <link rel="stylesheet" href="/css/bootstrap.min.css" >
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/community.css" >
+    <script src="/js/jquery.min.js" type="application/javascript"></script>
+    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+    <title >问题</title>
+</head>
+<body>
+
+<div th:insert="~{head::nav}"></div>
+
+<div class="container-fluid main">
+    <div class="row">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+            <h3><span th:text="${questionDTO.title}"></span></h3>
+            <span>
+                作者：<span th:text="${questionDTO.user.name}"></span> |
+                发布时间：<span th:text="${#dates.format(questionDTO.gmtCreate,'yyyy-MM-dd HH:mm')}"></span> |
+                阅读数：<span th:text="${questionDTO.viewCount}"></span>
+            </span>
+            <hr>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="font-size:16px"th:text="${questionDTO.description}"> </div>
+                <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <a  th:href="@{'/publish/'+${questionDTO.id}}"  th:if="${session.user!=null&&session.user.id==questionDTO.creator}" >
+                    <h6><span class="glyphicon glyphicon-pencil" aria-hidden="true" style="margin-right:10px;"></span>编辑</h6>
+                </a>
+        </div>
+
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
+                <h4>发起人</h4>
+                <div class="media-left">
+                    <a href="#">
+                        <img class="media-object img-around" th:src="${questionDTO.user.avatarUrl}" alt="个人头像">
+                    </a>
+                </div>
+                <div  class="media-body text-error"  >
+                    <h5 class="media-heading" style="margin-top:10px;" >
+                        <span th:text="${questionDTO.user.name}"></span>
+                    </h5>
+                </div>
+                <hr col-lg-12 col-md-12 col-sm-12 col-xs-12>
+                <div class="form-group">
+                    <label for="tag">邮件邀请他人回复：</label>
+                    <input type="submit" class="form-control" id="tag" name="tag"  placeholder="邮件邀请回复...">
+                </div>
+                <button type="submit" class="btn btn-success" style="float:right;">邀请</button>
+
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
+                <hr col-lg-12 col-md-12 col-sm-12 col-xs-12>
+                <h4>相关问题</h4>
+            </div>
+            </div>
+    </div>
+</div>
+
+</body>
+</html>

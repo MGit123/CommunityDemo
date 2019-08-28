@@ -58,10 +58,6 @@ public class BaseController {
        return "index";
    }
 
-   @RequestMapping("/index")
-   public String index(){
-       return "index";
-   }
 
    @GetMapping("/callback")
     public String callback(@RequestParam(name="code")String code,

@@ -2,10 +2,7 @@ package com.lgx.community.mapper;
 
 
 import com.lgx.community.entity.Question;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -20,4 +17,10 @@ public interface QuestionMapper {
 
     @Select("select count(1) from question")
     Integer count();
+
+    @Select("select * from question where id=#{id}")
+    Question getById(@Param(value="id") Integer id);
+
+    @Update("update question set title=#{title}, description=#{description}, tag=#{tag} where id=#{id}")
+    void Update(Question question);
 }
