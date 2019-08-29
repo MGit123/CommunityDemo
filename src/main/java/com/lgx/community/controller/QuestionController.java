@@ -28,4 +28,13 @@ public class QuestionController {
         return "question";
 
     }
+
+    @RequestMapping("profile/question/{id}")
+    public String personQuestion(@PathVariable(name="id") Integer id, Model model ){
+
+        QuestionDTO questionDTO=questionService.getById(id);
+        model.addAttribute("questionDTO",questionDTO);
+        return "question";
+
+    }
 }

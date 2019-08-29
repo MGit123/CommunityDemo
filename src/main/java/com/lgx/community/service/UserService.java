@@ -1,9 +1,12 @@
 package com.lgx.community.service;
 
 import com.lgx.community.entity.User;
+import com.lgx.community.entity.UserExample;
 import com.lgx.community.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author admin
@@ -17,24 +20,29 @@ public class UserService {
     private UserMapper userMapper;
 
 
-    public User findByToken(String token) {
-        return userMapper.findByToken(token);
-    }
-
     public void createOrUpdate(User user) {
 
-       User dbUser=userMapper.findByAccountId(user.getAccountId());
-       if(dbUser==null){
+        UserExample userExample=new UserExample();
+        userExample.createCriteria()
+                .andAccountIdEqualTo(user.getAccountId());
+       List<User> users=userMapper.selectByExample(userExample);
+      // User dbUser=userMapper.findByAccountId(user.getAccountId());
+       if(users.size()==0){
            //插入
            user.setGmtCreate(System.currentTimeMillis());
            user.setGmtModified(user.getGmtCreate());
            userMapper.insert(user);
        }else{
-           dbUser.setName(user.getName());
-           dbUser.setToken(user.getToken());
-           dbUser.setAvatarUrl(user.getAvatarUrl());
-           dbUser.setGmtModified(System.currentTimeMillis());
-           userMapper.update(dbUser);
+           //更新
+           User dbUser=users.get(0);
+           User updateUser=new User();
+           updateUser.setName(user.getName());
+           updateUser.setToken(user.getToken());
+           updateUser.setAvatarUrl(user.getAvatarUrl());
+           updateUser.setGmtModified(System.currentTimeMillis());
+           UserExample example=new UserExample();
+           example.createCriteria().andIdEqualTo(dbUser.getId());
+           userMapper.updateByExampleSelective(updateUser,example);
        }
 
     }

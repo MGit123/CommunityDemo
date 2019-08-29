@@ -1,31 +1,33 @@
 package com.lgx.community.mapper;
 
 import com.lgx.community.entity.User;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import com.lgx.community.entity.UserExample;
+import java.util.List;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.session.RowBounds;
 
-/**
- * @author admin
- * @date 2019/8/23 17:57
- */
-
-@Mapper
 public interface UserMapper {
+    long countByExample(UserExample example);
 
-    @Insert("insert into user (name,account_id,token,gmt_create,gmt_modified,avatar_url) values(#{name},#{accountId},#{token},#{gmtCreate},#{gmtModified},#{avatarUrl})")
-     void insert (User user);
+    int deleteByExample(UserExample example);
 
-    @Select("select * from user where token=#{token}")
-    User findByToken(String token);
+    int deleteByPrimaryKey(Integer id);
 
-    @Select("select * from user where id=#{id}")
-    User findByID(Integer id);
+    int insert(User record);
 
-    @Select("select * from user where account_id=#{accountId}")
-    User findByAccountId(String accountId);
+    int insertSelective(User record);
 
-    @Update("update user set name=#{name}, token=#{token} ,gmt_modified=#{gmtModified},avatar_url=#{avatarUrl} where id=#{id}")
-    void update(User user);
+    List<User> selectByExampleWithRowbounds(UserExample example, RowBounds rowBounds);
+
+    List<User> selectByExample(UserExample example);
+
+    User selectByPrimaryKey(Integer id);
+
+    int updateByExampleSelective(@Param("record") User record, @Param("example") UserExample example);
+
+    int updateByExample(@Param("record") User record, @Param("example") UserExample example);
+
+    int updateByPrimaryKeySelective(User record);
+
+    int updateByPrimaryKey(User record);
 }

@@ -1,9 +1,17 @@
 package com.lgx.community.controller;
 
+import com.lgx.community.dto.PaginationDTO;
+import com.lgx.community.entity.User;
+import com.lgx.community.service.QuestionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author admin
@@ -13,8 +21,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class ProfileController {
 
+    @Autowired
+    private QuestionService questionService;
+
     @RequestMapping("/profile/{action}")
-    public String ProfileAction(@PathVariable(name="action") String action, Model model){
+    public String ProfileAction(@PathVariable(name="action") String action, Model model,
+                                @RequestParam(name="page",defaultValue ="1") Integer page,
+                                @RequestParam(name="size",defaultValue ="5") Integer size,
+                                HttpServletRequest request){
+
+        User user=(User)request.getSession().getAttribute("user");
+        if(user==null){
+            return "redirect:/";
+        }
 
         if("questions".equals(action)){
             model.addAttribute("section","questions");
@@ -23,6 +42,9 @@ public class ProfileController {
             model.addAttribute("section","repies");
             model.addAttribute("sectionName","最新回复");
         }
+
+        PaginationDTO paginationDTO=questionService.personList(user.getId(),page,size);
+        model.addAttribute("pagination",paginationDTO);
 
         return "profile";
     }

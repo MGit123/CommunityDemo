@@ -1,7 +1,8 @@
 package com.lgx.community.interceptor;
 
 import com.lgx.community.entity.User;
-import com.lgx.community.service.UserService;
+import com.lgx.community.entity.UserExample;
+import com.lgx.community.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -10,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * @author admin
@@ -20,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 public class SessionInterceptor implements HandlerInterceptor {
 
     @Autowired
-    private UserService userService;
+    private UserMapper userMapper;
 
 
     @Override
@@ -31,9 +33,12 @@ public class SessionInterceptor implements HandlerInterceptor {
             for(Cookie cookie:cookies) {
                 if (cookie.getName().equals("token")) {
                     String token = cookie.getValue();
-                    User user = userService.findByToken(token);
-                    if (user != null) {
-                        request.getSession().setAttribute("user", user);
+                    UserExample userExample=new UserExample();
+                    userExample.createCriteria().andTokenEqualTo(token);
+                    List<User> users=userMapper.selectByExample(userExample);
+                    //User user = userService.findByToken(token);
+                    if (users.size()!= 0) {
+                        request.getSession().setAttribute("user", users.get(0));
                     }
                     break;
                 }
