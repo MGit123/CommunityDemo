@@ -41,7 +41,7 @@ public class ErrorExceptionHandler {
            } else {
                resultDTO = ResultDTO.errorOf(CustomizeErrorCode.SYS_ERROE);
            }
-          System.err.println("我来到json的错误类型啦!");
+
            try {
                response.setContentType("application/json");
                response.setStatus(200);

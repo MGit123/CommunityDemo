@@ -9,8 +9,18 @@ import com.lgx.community.exception.CustomizeException;
  */
 public class ResultDTO {
 
+
+
     private Integer code;
     private String message;
+
+    public String getMessage() {
+        return message;
+    }
+
+    public Integer getCode() {
+        return code;
+    }
 
     public static ResultDTO errorOf(Integer code,String message){
         ResultDTO resultDTO=new ResultDTO();

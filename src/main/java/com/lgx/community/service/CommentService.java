@@ -10,6 +10,7 @@ import com.lgx.community.mapper.QuestionExtMapper;
 import com.lgx.community.mapper.QuestionMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author admin
@@ -28,6 +29,9 @@ public class CommentService {
     @Autowired
     private CommentMapper commentMapper;
 
+
+    //事物注解，当多个数据操作有一个出问题时，就发生回滚
+    @Transactional
     public void insert(Comment comment) {
 
         if(comment.getParentId()==null||comment.getParentId()==0){

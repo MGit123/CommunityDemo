@@ -29,7 +29,7 @@ public class CommentController {
 
     @RequestMapping(value="/comment")
     @ResponseBody
-    public Object Post(CommentDTO commentDTO,
+    public Object Post(@RequestBody CommentDTO commentDTO,
                        HttpServletRequest request){
 
         User user=(User)request.getSession().getAttribute("user");
@@ -43,7 +43,8 @@ public class CommentController {
        comment.setGmtCreate(System.currentTimeMillis());
        comment.setGmtModified(comment.getGmtCreate());
        comment.setCommentor(2);
+       comment.setLikeCount(0);
        commentService.insert(comment);
-        return ResultDTO.okOf();
+       return ResultDTO.okOf();
     }
 }
