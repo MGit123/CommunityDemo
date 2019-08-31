@@ -5,6 +5,9 @@ import com.lgx.community.dto.QuestionDTO;
 import com.lgx.community.entity.Question;
 import com.lgx.community.entity.QuestionExample;
 import com.lgx.community.entity.User;
+import com.lgx.community.exception.CustomizeErrorCode;
+import com.lgx.community.exception.CustomizeException;
+import com.lgx.community.mapper.QuestionExtMapper;
 import com.lgx.community.mapper.QuestionMapper;
 import com.lgx.community.mapper.UserMapper;
 import org.apache.ibatis.session.RowBounds;
@@ -25,6 +28,9 @@ public class QuestionService {
 
     @Autowired
     private QuestionMapper questionMapper;
+
+    @Autowired
+    private QuestionExtMapper questionExtMapper;
 
     @Autowired
     private UserMapper userMapper;
@@ -125,6 +131,11 @@ public class QuestionService {
 
     public QuestionDTO getById(Integer id){
         Question question=questionMapper.selectByPrimaryKey(id);
+
+        if(question==null){
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
+
         QuestionDTO questionDTO=new QuestionDTO();
         BeanUtils.copyProperties(question,questionDTO);
         //User user=userMapper.findByID(question.getCreator());
@@ -156,5 +167,12 @@ public class QuestionService {
 
             questionMapper.updateByExample(updateQuestion,example);
         }
+    }
+
+    public void addView(Integer id) {
+        Question question=new Question();
+        question.setId(id);
+        question.setViewCount(1);
+        questionExtMapper.addView(question);
     }
 }
