@@ -21,3 +21,13 @@ body{
 .text-error{
     margin-top: 15px;
 }
+
+.icon{
+    cursor: pointer;
+    font-size:13px;
+
+}
+
+.icon:hover{
+    background-color: #5bc0de;
+}

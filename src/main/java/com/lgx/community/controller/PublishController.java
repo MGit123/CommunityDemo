@@ -97,6 +97,8 @@ public class PublishController {
         question.setDescription(description);
         question.setTag(tag);
         question.setCreator(user.getId());
+        question.setCommentCount(0);
+        question.setViewCount(0);
         question.setGmtCreate(System.currentTimeMillis());
         questionService.createOrUpdate(question);
         request.getSession().removeAttribute("error");

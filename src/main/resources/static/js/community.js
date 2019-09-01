@@ -16,6 +16,7 @@ function commentPost() {
         success: function (response) {
             if (response.code == 200) {
               $("#commentSection").hide();
+              alert(response.message);
             } else {
                alert(response.message);
             }
