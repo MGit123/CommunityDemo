@@ -36,8 +36,11 @@ public class QuestionController {
         QuestionDTO questionDTO=questionService.getById(id);
         questionService.addView(id);
        List<CommentDTO> comments=commentService.listByTargetId(id, CommentTypeEnum.QUESTION);
+        List<QuestionDTO> relateQuestions=questionService.selectRelated(questionDTO);
+        System.err.println("有"+relateQuestions.size()+"个相关问题");
         model.addAttribute("questionDTO",questionDTO);
         model.addAttribute("comments",comments);
+        model.addAttribute("relateQuestions",relateQuestions);
         return "question";
 
     }

@@ -52,14 +52,15 @@ function collapseComment(e) {
         e.removeAttribute("data-collapse");
         e.classList.remove("active");
 
-    }else{
-        var CommentContainer=$("#comment-"+id);
-        if(CommentContainer.children().length!=1){
-            alert("haha");
+    }else {
+        var CommentContainer = $("#comment-" + id);
+
+        alert(CommentContainer.children().length+"个子元素");
+        if (CommentContainer.children().length !="3") {
             comments.addClass("in");
             e.setAttribute("data-collapse", "in");
             e.classList.add("active");
-        }else {
+        } else {
             alert("hehe");
             $.getJSON("/comment/" + id, function (data) {
                 $.each(data.data.reverse(), function (index, comment) {
@@ -77,8 +78,9 @@ function collapseComment(e) {
                         "html": comment.user.name
                     })).append($("<div/>", {
                         "html": comment.content
-                    })).append($("<div/>", {
-                        "class": " ",
+                    })).append($("<span/>", {
+                        "class": " pull-right",
+                        "html":moment(comment.gmtCreate).format('YYYY-MM-DD')
                     }));
 
                     var mediaElement = $("<div/>", {
@@ -99,5 +101,4 @@ function collapseComment(e) {
             });
         }
     }
-
 }
