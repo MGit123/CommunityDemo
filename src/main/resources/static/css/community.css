@@ -22,12 +22,36 @@ body{
     margin-top: 15px;
 }
 
-.icon{
+ .icon{
     cursor: pointer;
     font-size:13px;
 
 }
 
-.icon:hover{
-    background-color: #5bc0de;
+ .icon:hover{
+    background-color: #499ef3;
 }
+
+.active{
+    background-color: #499ef3;
+}
+
+ .collapse{
+
+     border:1px solid #eee;
+     border-radius: 5px;
+     margin-top:10px;
+ }
+
+ .btn-comment{
+   margin:0px 0px 15px 10px;
+   float:right;
+ }
+
+.tag-text{
+    margin-top:-15px ;
+    margin-right: 5px;
+    text-decoration: none;
+    list-style: none;
+}
+

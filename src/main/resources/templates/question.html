@@ -19,6 +19,7 @@
 
             <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
 
+               <!--问题头部-->
                 <h3><span th:text="${questionDTO.title}"></span></h3>
                     <span>
                 作者：<span th:text="${questionDTO.user.name}"></span> |
@@ -26,42 +27,72 @@
                 阅读数：<span th:text="${questionDTO.viewCount}"></span>
             </span>
             <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:3px">
+
+                <!--问题内容-->
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="font-size:16px"th:text="${questionDTO.description}"></div>
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
                 <a  th:href="@{'/publish/'+${questionDTO.id}}"  th:if="${session.user!=null&&session.user.id==questionDTO.creator}" >
                     <hr>
+                    <span class="label label-info tag-text"  th:each="tag:${questionDTO.tag.split(',')}">
+                         <span class="glyphicon glyphicon-tags" aria-hidden="true"></span>
+                    <span   th:text="${tag}">
+                       </span>
+                    </span>
+
                     <h6><span class="glyphicon glyphicon-pencil" aria-hidden="true" style="margin-right:10px;"></span>编辑</h6>
                 </a>
             </div>
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom:25px;">
 
-
+                <!-- 回复内容-->
                 <h3 style="margin-bottom:-10px;"><span th:text="${questionDTO.commentCount}"></span>个回复</h3>
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <!-- 评论内容-->
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" th:each="comment:${comments}">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 comment" th:each="comment:${comments}">
                     <div class="media-left">
                         <a href="#">
                             <img class="media-object img-around" th:src="${comment.user.avatarUrl}" alt="个人头像">
                         </a>
                     </div>
                     <div  class="media-body text-error" >
-                        <h5 class="media-heading" style="margin-top:10px;" >
+                        <h5 class="media-heading" style="margin-top:10px;">
                             <span th:text="${comment.user.name}"></span>
                         </h5>
                         <div th:text="${comment.content}"></div>
-                        <span class="glyphicon glyphicon-thumbs-up icon" aria-hidden="true" style="margin-right:10px;">3</span>
-                        <span class="glyphicon glyphicon-comment icon" aria-hidden="true" style="margin-right:10px;">2</span>
+                        <span class="glyphicon glyphicon-thumbs-up icon" aria-hidden="true" style="margin-right:10px;"></span>
+                        <span class="glyphicon glyphicon-comment icon" th:data-id="${comment.id}" th:text="${comment.commentCount}" onclick="collapseComment(this)"></span>
                         <span style="float:right" th:text="${#dates.format(comment.gmtCreate,'yyyy-MM-dd')}"></span>
+                    </div>
+
+                    <!--二级回复-->
+                    <div th:id="${'comment-'+comment.id}" class="col-lg-12 col-md-12 col-sm-12 col-xs-12 collapse">
+                      <!--  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 comment" th:each="comment:${comments}">
+                            <div class="media-left">
+                                <a href="#">
+                                    <img class="media-object img-around" th:src="${comment.user.avatarUrl}" alt="个人头像">
+                                </a>
+                            </div>
+                            <div  class="media-body text-error" >
+                                <h5 class="media-heading" style="margin-top:10px;" >
+                                    <span th:text="${comment.user.name}"></span>
+                                </h5>
+                                <div th:text="${comment.content}"></div>
+                                <span style="float:right" th:text="${#dates.format(comment.gmtCreate,'yyyy-MM-dd')}"></span>
+                            </div>
+                            <hr>
+                    </div>  -->
+                        <div class="form-group">
+                            <input type="text" class="form-control"  th:id="${'input-'+comment.id}"  placeholder="请输入评论内容...">
+                        </div>
+                        <button type="submit" class="btn btn-default btn-comment" >取消</button>
+                        <button type="submit" class="btn btn-success btn-comment" th:data-id="${comment.id}" onclick="commentPost2(this)" >评论</button>
                     </div>
                     <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 </div>
 
-
            <!-- 回复栏 -->
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="commentSection"
                  th:if="${session.user!=null}" style="margin-top: 15px;">
+                <h4>提交回复</h4>
                 <div class="media-left">
                     <a href="#">
                         <img class="media-object img-around" th:src="${session.user.avatarUrl}" alt="个人头像">
@@ -86,6 +117,7 @@
 
             </div>
 
+      <!--左边部分-->
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:20px;">
                 <h4>发起人</h4>
@@ -102,7 +134,7 @@
                 <hr col-lg-12 col-md-12 col-sm-12 col-xs-12>
                 <div class="form-group">
                     <label for="tag">邮件邀请他人回复：</label>
-                    <input type="submit" class="form-control" id="tag" name="tag"  placeholder="邮件邀请回复...">
+                    <input type="text" class="form-control" id="tag" name="tag"  placeholder="邮件邀请回复...">
                 </div>
                 <button type="submit" class="btn btn-success" style="float:right;">邀请</button>
 

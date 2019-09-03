@@ -2,6 +2,7 @@ package com.lgx.community.controller;
 
 import com.lgx.community.dto.CommentDTO;
 import com.lgx.community.dto.QuestionDTO;
+import com.lgx.community.exception.CommentTypeEnum;
 import com.lgx.community.service.CommentService;
 import com.lgx.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class QuestionController {
 
         QuestionDTO questionDTO=questionService.getById(id);
         questionService.addView(id);
-       List<CommentDTO> comments=commentService.listByQuestionId(id);
+       List<CommentDTO> comments=commentService.listByTargetId(id, CommentTypeEnum.QUESTION);
         model.addAttribute("questionDTO",questionDTO);
         model.addAttribute("comments",comments);
         return "question";

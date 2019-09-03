@@ -63,7 +63,9 @@ public class QuestionService {
         paginationDTO.setPagination(page,totalPage);
         Integer offset=size*(page-1);  //起始页
         //List<Question> questions=questionMapper.list(offset,size);
-        List<Question> questions=questionMapper.selectByExampleWithRowbounds(new QuestionExample(),
+        QuestionExample questionExample =new QuestionExample();
+        questionExample.setOrderByClause("gmt_create desc");
+        List<Question> questions=questionMapper.selectByExampleWithRowbounds(questionExample,
                 new RowBounds(offset,size));
 
         List<QuestionDTO> questionDTOList=new ArrayList<>();
@@ -110,6 +112,7 @@ public class QuestionService {
         //List<Question> questions=questionMapper.list(offset,size);
         //QuestionExample example=new QuestionExample();
        //questionExample.createCriteria().andCreatorEqualTo(userId);
+        questionExample.setOrderByClause("gmt_create desc");
         List<Question> questions=questionMapper.selectByExampleWithRowbounds(questionExample,
                 new RowBounds(offset,size));
 
@@ -152,8 +155,6 @@ public class QuestionService {
             question.setGmtModified(question.getGmtCreate());
             questionMapper.insert(question);
         }else{
-            //修改
-
             //要修改的question部分
             Question updateQuestion=new Question();
             updateQuestion.setGmtModified(System.currentTimeMillis());

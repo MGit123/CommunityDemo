@@ -5,10 +5,7 @@ import com.lgx.community.entity.*;
 import com.lgx.community.exception.CommentTypeEnum;
 import com.lgx.community.exception.CustomizeErrorCode;
 import com.lgx.community.exception.CustomizeException;
-import com.lgx.community.mapper.CommentMapper;
-import com.lgx.community.mapper.QuestionExtMapper;
-import com.lgx.community.mapper.QuestionMapper;
-import com.lgx.community.mapper.UserMapper;
+import com.lgx.community.mapper.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,6 +37,9 @@ public class CommentService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private CommentExtMapper commentExtMapper;
+
 
     //事物注解，当多个数据操作有一个出问题时，就发生回滚
     @Transactional
@@ -60,6 +60,10 @@ public class CommentService {
                 throw  new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FOUND);
             }
             commentMapper.insert(comment);
+            Comment parentComment=new Comment();
+            parentComment.setId(comment.getParentId());
+            parentComment.setCommentCount(1);
+            commentExtMapper.addComment(parentComment);
 
         }else{
             //回复问题
@@ -79,9 +83,10 @@ public class CommentService {
         CommentExample commentExample=new CommentExample();
         commentExample.createCriteria().andParentIdEqualTo(id).
                 andTypeEqualTo(CommentTypeEnum.QUESTION.getType());
+        commentExample.setOrderByClause("gmt_create desc");
         List<Comment> comments=commentMapper.selectByExample(commentExample);
 
-        System.err.println("评论个数为:"+comments.size());
+        System.err.println("回复个数为:"+comments.size());
 
         if(comments.size()==0){
             return  new ArrayList<>();
@@ -109,5 +114,43 @@ public class CommentService {
 
        return commentDTOS;
 
+    }
+
+    public List<CommentDTO> listByTargetId(Integer id, CommentTypeEnum type) {
+
+        //获取评论类型为1的评论
+        CommentExample commentExample=new CommentExample();
+        commentExample.createCriteria().andParentIdEqualTo(id).
+                andTypeEqualTo(type.getType());
+        commentExample.setOrderByClause("gmt_create desc");
+        List<Comment> comments=commentMapper.selectByExample(commentExample);
+
+        System.err.println("评论个数为:"+comments.size());
+
+        if(comments.size()==0){
+            return  new ArrayList<>();
+        }
+
+        //获取去重的评论人Id
+        Set<Integer> commentors= comments.stream().map(comment->comment.getCommentor()).collect(Collectors.toSet());
+        List<Integer> userIds=new ArrayList<>();
+        userIds.addAll(commentors);
+
+        //获取评论人并转换为Map
+        UserExample userExample=new UserExample();
+        userExample.createCriteria().andIdIn(userIds);
+        List<User> users=userMapper.selectByExample(userExample);
+        Map<Integer,User> userMap=users.stream().collect(Collectors.toMap(user->user.getId(), user->user));
+
+        List<CommentDTO> commentDTOS=comments.stream().map(
+                comment -> {CommentDTO commentDTO=new CommentDTO();
+                    BeanUtils.copyProperties(comment,commentDTO);
+                    commentDTO.setUser(userMap.get(comment.getCommentor()));
+                    return commentDTO;
+                }).collect(Collectors.toList());
+
+        System.err.println("CommentDTO个数为:"+commentDTOS.size());
+
+        return commentDTOS;
     }
 }

@@ -7,4 +7,6 @@ public interface QuestionExtMapper {
     int addView(Question record);
 
     int addComment(Question record);
+
+    Question questionRelated(Question record);
 }
