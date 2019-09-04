@@ -32,7 +32,7 @@ body{
     background-color: #499ef3;
 }
 
-.active{
+.activ{
     background-color: #499ef3;
 }
 
@@ -53,6 +53,14 @@ body{
     margin-right: 5px;
     text-decoration: none;
     list-style: none;
+}
+
+.tag-tex{
+    margin: 10px;
+    text-decoration: none;
+    list-style: none;
+    white-space:normal;
+    display: inline-block;
 }
 
 .li-text{

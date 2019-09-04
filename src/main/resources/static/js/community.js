@@ -50,7 +50,7 @@ function collapseComment(e) {
         //折叠二级评论
         comments.removeClass("in");
         e.removeAttribute("data-collapse");
-        e.classList.remove("active");
+        e.classList.remove("activ");
 
     }else {
         var CommentContainer = $("#comment-" + id);
@@ -101,4 +101,23 @@ function collapseComment(e) {
             });
         }
     }
+}
+
+function showSelectTag(){
+    $("#select-tag").show();
+}
+
+function selectTag(e){
+
+    var previous=$("#tag").val();
+    var value=e.getAttribute("data-tag");
+
+    if(previous.indexOf(value)==-1){
+        if(previous){
+            $("#tag").val(previous+","+value);
+        }else{
+            $("#tag").val(value);
+        }
+    }
+
 }

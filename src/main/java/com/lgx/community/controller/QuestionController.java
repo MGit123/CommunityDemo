@@ -2,7 +2,9 @@ package com.lgx.community.controller;
 
 import com.lgx.community.dto.CommentDTO;
 import com.lgx.community.dto.QuestionDTO;
+import com.lgx.community.dto.TagDTO;
 import com.lgx.community.exception.CommentTypeEnum;
+import com.lgx.community.provider.TagCache;
 import com.lgx.community.service.CommentService;
 import com.lgx.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +51,8 @@ public class QuestionController {
     public String personQuestion(@PathVariable(name="id") Integer id, Model model ){
 
         QuestionDTO questionDTO=questionService.getById(id);
+        List<TagDTO> tags=new TagCache().get();
+        model.addAttribute("tags",tags);
         model.addAttribute("questionDTO",questionDTO);
         return "question";
 

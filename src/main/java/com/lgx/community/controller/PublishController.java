@@ -1,10 +1,13 @@
 package com.lgx.community.controller;
 
 import com.lgx.community.dto.QuestionDTO;
+import com.lgx.community.dto.TagDTO;
 import com.lgx.community.entity.Question;
 import com.lgx.community.entity.User;
+import com.lgx.community.provider.TagCache;
 import com.lgx.community.service.QuestionService;
 import com.lgx.community.service.UserService;
+import org.codehaus.plexus.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author admin
@@ -29,7 +33,8 @@ public class PublishController {
     private QuestionService questionService;
 
     @RequestMapping("/publish")
-    public String publish() {
+    public String publish(Model model) {
+        model.addAttribute("tags",TagCache.get());
         return "publish";
     }
 
@@ -41,7 +46,7 @@ public class PublishController {
         model.addAttribute("description",question.getDescription());
         model.addAttribute("tag",question.getTag());
         model.addAttribute("id",question.getId());
-
+        model.addAttribute("tags",TagCache.get());
         return "publish";
     }
 
@@ -58,6 +63,7 @@ public class PublishController {
                               HttpServletRequest request, HttpServletResponse response, Model model ) throws IOException {
 
         System.err.println("title:"+title+"description:"+description+"tag:"+tag);
+        model.addAttribute("tags",TagCache.get());
 
         if(title==null||title==""){
             request.getSession().setAttribute("error","标题不能为空!");
@@ -77,7 +83,12 @@ public class PublishController {
             return ;
         }
 
-
+        String IsValid=TagCache.filterIsValid(tag);
+        if(!StringUtils.isBlank(IsValid)){
+            request.getSession().setAttribute("error","输入非法标签:"+IsValid);
+            response.sendRedirect("publish");
+            return ;
+        }
 
         User user=(User)request.getSession().getAttribute("user");
 
