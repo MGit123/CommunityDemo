@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.lgx.community.mapper.CommentMapper">
-  <resultMap id="BaseResultMap" type="com.lgx.community.entity.Comment">
+<mapper namespace="com.lgx.community.mapper.NotificationMapper">
+  <resultMap id="BaseResultMap" type="com.lgx.community.entity.Notification">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    <result column="notifier" jdbcType="INTEGER" property="notifier" />
+    <result column="notifier_name" jdbcType="VARCHAR" property="notifierName" />
+    <result column="receiver" jdbcType="INTEGER" property="receiver" />
+    <result column="outer_title" jdbcType="VARCHAR" property="outerTitle" />
     <result column="type" jdbcType="INTEGER" property="type" />
-    <result column="commentor" jdbcType="INTEGER" property="commentor" />
-    <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="gmt_create" jdbcType="BIGINT" property="gmtCreate" />
-    <result column="gmt_modified" jdbcType="BIGINT" property="gmtModified" />
-    <result column="like_count" jdbcType="INTEGER" property="likeCount" />
-    <result column="comment_count" jdbcType="INTEGER" property="commentCount" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="outer_id" jdbcType="INTEGER" property="outerId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -71,15 +71,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, parent_id, type, commentor, content, gmt_create, gmt_modified, like_count, comment_count
+    id, notifier, notifier_name, receiver, outer_title, type, gmt_create, status, outer_id
   </sql>
-  <select id="selectByExample" parameterType="com.lgx.community.entity.CommentExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.lgx.community.entity.NotificationExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from comment
+    from notification
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -90,125 +90,125 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from comment
+    from notification
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from comment
+    delete from notification
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.lgx.community.entity.CommentExample">
-    delete from comment
+  <delete id="deleteByExample" parameterType="com.lgx.community.entity.NotificationExample">
+    delete from notification
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.lgx.community.entity.Comment">
-    insert into comment (id, parent_id, type, 
-      commentor, content, gmt_create, 
-      gmt_modified, like_count, comment_count
+  <insert id="insert" parameterType="com.lgx.community.entity.Notification">
+    insert into notification (id, notifier, notifier_name, 
+      receiver, outer_title, type, 
+      gmt_create, status, outer_id
       )
-    values (#{id,jdbcType=INTEGER}, #{parentId,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, 
-      #{commentor,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, #{gmtCreate,jdbcType=BIGINT}, 
-      #{gmtModified,jdbcType=BIGINT}, #{likeCount,jdbcType=INTEGER}, #{commentCount,jdbcType=INTEGER}
+    values (#{id,jdbcType=INTEGER}, #{notifier,jdbcType=INTEGER}, #{notifierName,jdbcType=VARCHAR}, 
+      #{receiver,jdbcType=INTEGER}, #{outerTitle,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, 
+      #{gmtCreate,jdbcType=BIGINT}, #{status,jdbcType=INTEGER}, #{outerId,jdbcType=INTEGER}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.lgx.community.entity.Comment">
-    insert into comment
+  <insert id="insertSelective" parameterType="com.lgx.community.entity.Notification">
+    insert into notification
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
       </if>
-      <if test="parentId != null">
-        parent_id,
+      <if test="notifier != null">
+        notifier,
+      </if>
+      <if test="notifierName != null">
+        notifier_name,
+      </if>
+      <if test="receiver != null">
+        receiver,
+      </if>
+      <if test="outerTitle != null">
+        outer_title,
       </if>
       <if test="type != null">
         type,
       </if>
-      <if test="commentor != null">
-        commentor,
-      </if>
-      <if test="content != null">
-        content,
-      </if>
       <if test="gmtCreate != null">
         gmt_create,
       </if>
-      <if test="gmtModified != null">
-        gmt_modified,
+      <if test="status != null">
+        status,
       </if>
-      <if test="likeCount != null">
-        like_count,
-      </if>
-      <if test="commentCount != null">
-        comment_count,
+      <if test="outerId != null">
+        outer_id,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="parentId != null">
-        #{parentId,jdbcType=INTEGER},
+      <if test="notifier != null">
+        #{notifier,jdbcType=INTEGER},
+      </if>
+      <if test="notifierName != null">
+        #{notifierName,jdbcType=VARCHAR},
+      </if>
+      <if test="receiver != null">
+        #{receiver,jdbcType=INTEGER},
+      </if>
+      <if test="outerTitle != null">
+        #{outerTitle,jdbcType=VARCHAR},
       </if>
       <if test="type != null">
         #{type,jdbcType=INTEGER},
       </if>
-      <if test="commentor != null">
-        #{commentor,jdbcType=INTEGER},
-      </if>
-      <if test="content != null">
-        #{content,jdbcType=VARCHAR},
-      </if>
       <if test="gmtCreate != null">
         #{gmtCreate,jdbcType=BIGINT},
       </if>
-      <if test="gmtModified != null">
-        #{gmtModified,jdbcType=BIGINT},
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
       </if>
-      <if test="likeCount != null">
-        #{likeCount,jdbcType=INTEGER},
-      </if>
-      <if test="commentCount != null">
-        #{commentCount,jdbcType=INTEGER},
+      <if test="outerId != null">
+        #{outerId,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.lgx.community.entity.CommentExample" resultType="java.lang.Long">
-    select count(*) from comment
+  <select id="countByExample" parameterType="com.lgx.community.entity.NotificationExample" resultType="java.lang.Long">
+    select count(*) from notification
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update comment
+    update notification
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.parentId != null">
-        parent_id = #{record.parentId,jdbcType=INTEGER},
+      <if test="record.notifier != null">
+        notifier = #{record.notifier,jdbcType=INTEGER},
+      </if>
+      <if test="record.notifierName != null">
+        notifier_name = #{record.notifierName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.receiver != null">
+        receiver = #{record.receiver,jdbcType=INTEGER},
+      </if>
+      <if test="record.outerTitle != null">
+        outer_title = #{record.outerTitle,jdbcType=VARCHAR},
       </if>
       <if test="record.type != null">
         type = #{record.type,jdbcType=INTEGER},
       </if>
-      <if test="record.commentor != null">
-        commentor = #{record.commentor,jdbcType=INTEGER},
-      </if>
-      <if test="record.content != null">
-        content = #{record.content,jdbcType=VARCHAR},
-      </if>
       <if test="record.gmtCreate != null">
         gmt_create = #{record.gmtCreate,jdbcType=BIGINT},
       </if>
-      <if test="record.gmtModified != null">
-        gmt_modified = #{record.gmtModified,jdbcType=BIGINT},
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=INTEGER},
       </if>
-      <if test="record.likeCount != null">
-        like_count = #{record.likeCount,jdbcType=INTEGER},
-      </if>
-      <if test="record.commentCount != null">
-        comment_count = #{record.commentCount,jdbcType=INTEGER},
+      <if test="record.outerId != null">
+        outer_id = #{record.outerId,jdbcType=INTEGER},
       </if>
     </set>
     <if test="_parameter != null">
@@ -216,69 +216,69 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update comment
+    update notification
     set id = #{record.id,jdbcType=INTEGER},
-      parent_id = #{record.parentId,jdbcType=INTEGER},
+      notifier = #{record.notifier,jdbcType=INTEGER},
+      notifier_name = #{record.notifierName,jdbcType=VARCHAR},
+      receiver = #{record.receiver,jdbcType=INTEGER},
+      outer_title = #{record.outerTitle,jdbcType=VARCHAR},
       type = #{record.type,jdbcType=INTEGER},
-      commentor = #{record.commentor,jdbcType=INTEGER},
-      content = #{record.content,jdbcType=VARCHAR},
       gmt_create = #{record.gmtCreate,jdbcType=BIGINT},
-      gmt_modified = #{record.gmtModified,jdbcType=BIGINT},
-      like_count = #{record.likeCount,jdbcType=INTEGER},
-      comment_count = #{record.commentCount,jdbcType=INTEGER}
+      status = #{record.status,jdbcType=INTEGER},
+      outer_id = #{record.outerId,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.lgx.community.entity.Comment">
-    update comment
+  <update id="updateByPrimaryKeySelective" parameterType="com.lgx.community.entity.Notification">
+    update notification
     <set>
-      <if test="parentId != null">
-        parent_id = #{parentId,jdbcType=INTEGER},
+      <if test="notifier != null">
+        notifier = #{notifier,jdbcType=INTEGER},
+      </if>
+      <if test="notifierName != null">
+        notifier_name = #{notifierName,jdbcType=VARCHAR},
+      </if>
+      <if test="receiver != null">
+        receiver = #{receiver,jdbcType=INTEGER},
+      </if>
+      <if test="outerTitle != null">
+        outer_title = #{outerTitle,jdbcType=VARCHAR},
       </if>
       <if test="type != null">
         type = #{type,jdbcType=INTEGER},
       </if>
-      <if test="commentor != null">
-        commentor = #{commentor,jdbcType=INTEGER},
-      </if>
-      <if test="content != null">
-        content = #{content,jdbcType=VARCHAR},
-      </if>
       <if test="gmtCreate != null">
         gmt_create = #{gmtCreate,jdbcType=BIGINT},
       </if>
-      <if test="gmtModified != null">
-        gmt_modified = #{gmtModified,jdbcType=BIGINT},
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
       </if>
-      <if test="likeCount != null">
-        like_count = #{likeCount,jdbcType=INTEGER},
-      </if>
-      <if test="commentCount != null">
-        comment_count = #{commentCount,jdbcType=INTEGER},
+      <if test="outerId != null">
+        outer_id = #{outerId,jdbcType=INTEGER},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.lgx.community.entity.Comment">
-    update comment
-    set parent_id = #{parentId,jdbcType=INTEGER},
+  <update id="updateByPrimaryKey" parameterType="com.lgx.community.entity.Notification">
+    update notification
+    set notifier = #{notifier,jdbcType=INTEGER},
+      notifier_name = #{notifierName,jdbcType=VARCHAR},
+      receiver = #{receiver,jdbcType=INTEGER},
+      outer_title = #{outerTitle,jdbcType=VARCHAR},
       type = #{type,jdbcType=INTEGER},
-      commentor = #{commentor,jdbcType=INTEGER},
-      content = #{content,jdbcType=VARCHAR},
       gmt_create = #{gmtCreate,jdbcType=BIGINT},
-      gmt_modified = #{gmtModified,jdbcType=BIGINT},
-      like_count = #{likeCount,jdbcType=INTEGER},
-      comment_count = #{commentCount,jdbcType=INTEGER}
+      status = #{status,jdbcType=INTEGER},
+      outer_id = #{outerId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <select id="selectByExampleWithRowbounds" parameterType="com.lgx.community.entity.CommentExample" resultMap="BaseResultMap">
+  <select id="selectByExampleWithRowbounds" parameterType="com.lgx.community.entity.NotificationExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from comment
+    from notification
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>

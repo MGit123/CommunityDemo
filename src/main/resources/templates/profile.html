@@ -15,11 +15,12 @@
 <div class="container-fluid main">
     <div class="row">
 
-        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12" >
             <h3><span th:text="${sectionName}"></span></h3>
             <hr>
 
-            <div class="media" th:each="question:${pagination.questions}">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" th:if="${section=='questions'}">
+            <div class="media" th:each="question:${pagination.data}">
                 <div class="media-left">
                     <a href="#">
                         <img class="media-object img-around" th:src="${question.user.avatarUrl}" alt="个人头像">
@@ -35,9 +36,22 @@
                               ●<span th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}"></span></span>
                 </div>
             </div>
+        </div>
 
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" th:if="${section=='repies'}">
+                <div class="media" th:each="notification :${pagination.data}">
+                <div class="media-body" >
+                    <p class="media-heading" >
+                        <span th:text="${notification.notifierName +' '+ notification.typeName+' '}"></span>
+                        <a  style="text-decoration: none;" th:text="${notification.outerTitle}"
+                        th:href="@{'/notification/'+ ${notification.id}}"></a>
+                    </p>
+                </div>
+                </div>
+            </div>
+
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <nav aria-label="Page navigation">
-
                 <ul class="pagination">
                     <li th:if="${pagination.showFirstPage}">
                         <a th:href="@{'/profile' +${section}(page=${1})}" aria-label="Previous">
@@ -66,9 +80,9 @@
                             <span aria-hidden="true">尾页</span>
                         </a>
                     </li>
-
                 </ul>
             </nav>
+            </div>
 
         </div>
 
@@ -77,7 +91,7 @@
             <div class="list-group" style="margin-top:25px;">
                 <a href="/profile/questions" th:class="${section=='questions'}?'list-group-item active':'list-group-item'">我的问题</a>
                 <a href="/profile/repies" th:class="${section=='repies'}?'list-group-item active':'list-group-item'">
-                    最新回复 <span class="badge">3</span></a>
+                    最新回复 <span class="badge" th:text="${session.unReadCount}"></span></a>
             </div>
 
         </div>

@@ -13,9 +13,9 @@ import java.util.List;
 
 @Setter
 @Getter
-public class PaginationDTO {
+public class PaginationDTO <T>{
 
-    private List<QuestionDTO> questions;
+    private List<T> data;
     private boolean showPrevious;  //是否展示前一页
     private boolean showFirstPage;  //展示第一页
     private boolean showNext;

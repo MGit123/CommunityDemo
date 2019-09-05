@@ -81,7 +81,7 @@ public class QuestionService {
             questionDTOList.add(questionDTO);
 
         }
-        paginationDTO.setQuestions(questionDTOList);
+        paginationDTO.setData(questionDTOList);
         System.err.println("评论信息收集成功!!!");
         return paginationDTO;
     }
@@ -129,7 +129,7 @@ public class QuestionService {
             questionDTOList.add(questionDTO);
 
         }
-        paginationDTO.setQuestions(questionDTOList);
+        paginationDTO.setData(questionDTOList);
         System.err.println("个人评论信息收集成功!!!");
         return paginationDTO;
 
