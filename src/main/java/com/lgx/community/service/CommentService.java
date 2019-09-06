@@ -72,7 +72,7 @@ public class CommentService {
             parentComment.setId(comment.getParentId());
             parentComment.setCommentCount(1);
             commentExtMapper.addComment(parentComment);
-            createNotify(comment,dbComment.getCommentor(),commetator.getName(),question.getTitle(),NotificationTypeEnum.REPLY_COMMENT,question.getId());
+            createNotify(comment,dbComment.getCommentor(),commetator.getName(),dbComment.getContent(),NotificationTypeEnum.REPLY_COMMENT,question.getId());
 
         }else{
             //回复问题

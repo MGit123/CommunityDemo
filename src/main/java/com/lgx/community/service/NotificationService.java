@@ -4,6 +4,8 @@ import com.lgx.community.dto.NotificationDTO;
 import com.lgx.community.dto.PaginationDTO;
 import com.lgx.community.dto.QuestionDTO;
 import com.lgx.community.entity.*;
+import com.lgx.community.exception.CustomizeErrorCode;
+import com.lgx.community.exception.CustomizeException;
 import com.lgx.community.exception.NotificationStatusEnum;
 import com.lgx.community.exception.NotificationTypeEnum;
 import com.lgx.community.mapper.NotificationMapper;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author admin
@@ -91,7 +94,20 @@ public class NotificationService {
     public NotificationDTO read(Integer id, User user) {
         Notification notification=notificationMapper.selectByPrimaryKey(id);
 
+        if(notification==null){
+            throw new CustomizeException(CustomizeErrorCode.READ_NOTIFICAATION_FAIL);
+        }
+
+        if(!Objects.equals(notification.getReceiver(),user.getId())){
+            throw new CustomizeException(CustomizeErrorCode.NOTIFICATION_NOT_FOUND);
+        }
+
+        notification.setStatus(NotificationStatusEnum.READ.getStatus());
+        notificationMapper.updateByPrimaryKey(notification);
+
         NotificationDTO notificationDTO=new NotificationDTO();
+        BeanUtils.copyProperties(notification,notificationDTO);
+        notificationDTO.setTypeName(NotificationTypeEnum.typeOfName(notification.getType()));
         return notificationDTO;
     }
 }

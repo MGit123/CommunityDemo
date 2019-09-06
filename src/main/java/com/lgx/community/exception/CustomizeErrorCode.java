@@ -11,8 +11,9 @@ public enum CustomizeErrorCode {
     NOT_LOGIN(203,"请登录在尝试该操作"),
     SYS_ERROE(204,"服务器冒烟啦，要不您稍后在试试！！！"),
     TYPE_PARAM_WRONG(205,"评论类型错误或不存在"),
-    COMMENT_NOT_FOUND(206,"该评论不存在或已被删除");
-
+    COMMENT_NOT_FOUND(206,"该评论不存在或已被删除"),
+    READ_NOTIFICAATION_FAIL(209,"您的消息查找有误"),
+    NOTIFICATION_NOT_FOUND(210,"该消息不存在");
 
     private Integer code;
     private String message;

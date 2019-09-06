@@ -53,8 +53,6 @@ public class ProfileController {
             model.addAttribute("sectionName","最新回复");
         }
 
-
-
         return "profile";
     }
 }

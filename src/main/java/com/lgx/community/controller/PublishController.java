@@ -55,8 +55,8 @@ public class PublishController {
         return "/";
     } */
 
-    @PostMapping("/createPublish")
-    public void createPublish(@RequestParam(value="title", required = false) String title,
+    @RequestMapping("/createPublish")
+    public String createPublish(@RequestParam(value="title", required = false) String title,
                               @RequestParam(value="description", required = false) String description,
                               @RequestParam(value="tag", required = false) String tag,
                               @RequestParam(value="id", required = false) Integer id,
@@ -66,36 +66,36 @@ public class PublishController {
         model.addAttribute("tags",TagCache.get());
 
         if(title==null||title==""){
-            request.getSession().setAttribute("error","标题不能为空!");
-            response.sendRedirect("publish");
-            return;
+            model.addAttribute("error","标题不能为空!");
+            System.err.println(1);
+            return "publish";
         }
 
         if(description==null||description==""){
-            request.getSession().setAttribute("error","问题内容不能为空!");
-            response.sendRedirect("publish");
-            return ;
+            model.addAttribute("error","问题内容不能为空!");
+            System.err.println(2);
+            return "publish";
         }
 
         if(tag==null||tag==""){
-            request.getSession().setAttribute("error","标签不能为空!");
-            response.sendRedirect("publish");
-            return ;
+            model.addAttribute("error","标签不能为空!");
+            System.err.println(3);
+            return "publish";
         }
 
         String IsValid=TagCache.filterIsValid(tag);
-        if(!StringUtils.isBlank(IsValid)){
-            request.getSession().setAttribute("error","输入非法标签:"+IsValid);
-            response.sendRedirect("publish");
-            return ;
+        if(StringUtils.isNotBlank(IsValid)){
+            model.addAttribute("error","输入非法标签:"+IsValid);
+            System.err.println(4);
+            return "publish";
         }
 
         User user=(User)request.getSession().getAttribute("user");
 
         if(user==null){
-            request.getSession().setAttribute("error","用户未登录!");
-            response.sendRedirect("publish");
-            return ;
+            model.addAttribute("error","用户未登录!");
+            System.err.println(5);
+            return "publish";
         }
 
         model.addAttribute("title",title);
@@ -112,8 +112,7 @@ public class PublishController {
         question.setViewCount(0);
         question.setGmtCreate(System.currentTimeMillis());
         questionService.createOrUpdate(question);
-        request.getSession().removeAttribute("error");
-        response.sendRedirect("/");
-        return ;
+        return "redirect:/";
+
     }
 }

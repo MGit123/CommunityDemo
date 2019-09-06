@@ -28,7 +28,6 @@ public class SessionInterceptor implements HandlerInterceptor {
     @Autowired
     private NotificationService notificationService;
 
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 

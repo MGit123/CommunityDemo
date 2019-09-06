@@ -5,9 +5,13 @@
     <link rel="stylesheet" href="/css/bootstrap.min.css" >
     <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/css/community.css" >
-    <script src="/js/jquery.min.js" type="application/javascript"></script>
-    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+    <link rel="stylesheet" href="css/editormd.preview.min.css" >
+    <script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
     <script src="/js/community.js" type="application/javascript"></script>
+    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+    <script src="/js/editormd.min.js" type="application/javascript"></script>
+    <script src="/js/lib/marked.min.js" type="application/javascript"></script>
+    <script src="/js/lib/prettify.min.js" type="application/javascript"></script>
     <script src="http://momentjs.cn/downloads/moment.min.js" type="application/javascript"></script>
     <title >问题</title>
 </head>
@@ -30,7 +34,20 @@
             <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:3px">
 
                 <!--问题内容-->
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="font-size:16px"th:text="${questionDTO.description}"></div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="test_view">
+                    <textarea class="form-control" style="display: none" th:text="${questionDTO.description}" ></textarea>
+                </div>
+
+                <script type="application/javascript">
+                    $(function() {
+                        var testview=editormd.markdownToHTML("test_view",{
+
+                        });
+                    });
+
+                </script>
+
+
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <a  th:href="@{'/publish/'+${questionDTO.id}}"  th:if="${session.user!=null&&session.user.id==questionDTO.creator}" >
                     <hr>
@@ -104,9 +121,11 @@
                     </h5>
                 </div>
                 <input type="hidden" id="parentId" th:value="${questionDTO.id}">
-                <div class="form-group">
+
+                <div class="form-group" >
                     <textarea class="form-control"  id="commentContent"  cols="30" rows="8"></textarea>
                 </div>
+
                 <button type="submit" class="btn btn-success" onclick="commentPost()" style="float:right; margin-bottom:15px;">回复</button>
 
            </div>

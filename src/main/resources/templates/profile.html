@@ -33,7 +33,10 @@
                     <span th:text="${question.description}">点击进入查看视频</span><br>
                     <span class="text-info"><span th:text="${question.getCommentCount()}"></span>个回复
                           ●<span th:text="${question.viewCount}"></span>次浏览
-                              ●<span th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}"></span></span>
+                              ●<span th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}"></span>
+                        <span class="glyphicon glyphicon-pencil" aria-hidden="true"
+                              style="margin-left:10px;" ><a th:href="@{'/publish/'+${question.id}}">编辑</a></span>
+                    </span>
                 </div>
             </div>
         </div>
@@ -45,6 +48,7 @@
                         <span th:text="${notification.notifierName +' '+ notification.typeName+' '}"></span>
                         <a  style="text-decoration: none;" th:text="${notification.outerTitle}"
                         th:href="@{'/notification/'+ ${notification.id}}"></a>
+                        <span class="label label-danger" th:if="${notification.status==0}">未读</span>
                     </p>
                 </div>
                 </div>

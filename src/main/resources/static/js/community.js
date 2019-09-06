@@ -54,14 +54,11 @@ function collapseComment(e) {
 
     }else {
         var CommentContainer = $("#comment-" + id);
-
-        alert(CommentContainer.children().length+"个子元素");
         if (CommentContainer.children().length !="3") {
             comments.addClass("in");
             e.setAttribute("data-collapse", "in");
             e.classList.add("active");
         } else {
-            alert("hehe");
             $.getJSON("/comment/" + id, function (data) {
                 $.each(data.data.reverse(), function (index, comment) {
                     var mediaLiftElement = $("<div/>", {
