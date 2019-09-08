@@ -31,6 +31,7 @@ function target(targetId,content,type){
         }),
         success: function (response) {
             if (response.code == 200) {
+                alert(response.message);
                 window.location.reload();
             } else {
                 alert(response.message);
@@ -38,6 +39,16 @@ function target(targetId,content,type){
         }
 
     });
+}
+
+function commentdelete(e){
+
+    var id=e.getAttribute("data-id");
+    var comments=$("#comment-"+id);
+    comments.removeClass("in");
+    e.removeAttribute("data-collapse");
+    e.classList.remove("activ");
+
 }
 
 function collapseComment(e) {

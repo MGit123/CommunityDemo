@@ -1,5 +1,6 @@
 package com.lgx.community.mapper;
 
+import com.lgx.community.dto.QuestionQueryDTO;
 import com.lgx.community.entity.Question;
 import com.lgx.community.entity.QuestionExample;
 import java.util.List;
@@ -38,4 +39,5 @@ public interface QuestionMapper {
     int updateByPrimaryKeyWithBLOBs(Question record);
 
     int updateByPrimaryKey(Question record);
+
 }

@@ -2,6 +2,7 @@ package com.lgx.community.service;
 
 import com.lgx.community.dto.PaginationDTO;
 import com.lgx.community.dto.QuestionDTO;
+import com.lgx.community.dto.QuestionQueryDTO;
 import com.lgx.community.entity.Question;
 import com.lgx.community.entity.QuestionExample;
 import com.lgx.community.entity.User;
@@ -42,12 +43,27 @@ public class QuestionService {
         questionMapper.insert(question);
     }
 
-    public PaginationDTO list(Integer page,Integer size) {
+    public PaginationDTO list(String search,Integer page,Integer size) {
+
+        if(StringUtils.isNotBlank(search)){
+            String[] tags=StringUtils.split(search," ");
+            search= Arrays.stream(tags).collect(Collectors.joining("|"));
+        }else{
+            search=null;
+        }
 
         PaginationDTO paginationDTO=new PaginationDTO();
-        Integer totalCount=(int)questionMapper.countByExample(new QuestionExample());
+
+        QuestionQueryDTO questionQueryDTO=new QuestionQueryDTO();
+        questionQueryDTO.setSearch(search);
+        System.err.println("search:"+search);
+        Integer totalCount=questionExtMapper.countBySearch(questionQueryDTO);
+
+        System.err.println("有"+totalCount+"个问题!");
 
         Integer totalPage;
+
+
 
         if(totalCount%size==0){     //计算总共的页数
             totalPage=totalCount/size;
@@ -65,11 +81,19 @@ public class QuestionService {
 
         paginationDTO.setPagination(page,totalPage);
         Integer offset=size*(page-1);  //起始页
+        if(totalCount==0){
+           offset=0;
+        }
         //List<Question> questions=questionMapper.list(offset,size);
-        QuestionExample questionExample =new QuestionExample();
-        questionExample.setOrderByClause("gmt_create desc");
-        List<Question> questions=questionMapper.selectByExampleWithRowbounds(questionExample,
-                new RowBounds(offset,size));
+        //QuestionExample questionExample =new QuestionExample();
+        //questionExample.setOrderByClause("gmt_create desc");
+
+        questionQueryDTO.setOffset(offset);
+        questionQueryDTO.setSize(size);
+
+        System.err.println("offset:"+offset+"size:"+size);
+        List<Question> questions=questionExtMapper.selectBySearch(questionQueryDTO);
+
 
         List<QuestionDTO> questionDTOList=new ArrayList<>();
         for(Question question:questions){

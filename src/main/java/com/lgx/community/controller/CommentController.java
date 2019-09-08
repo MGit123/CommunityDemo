@@ -38,13 +38,15 @@ public class CommentController {
         if(user==null){
             return ResultDTO.errorOf(CustomizeErrorCode.NOT_LOGIN);
         }
+
+        System.err.println("提交信息"+commentDTO.getParentId()+commentDTO.getContent());
        Comment comment=new Comment();
        comment.setParentId(commentDTO.getParentId());
        comment.setContent(commentDTO.getContent());
        comment.setType(commentDTO.getType());
        comment.setGmtCreate(System.currentTimeMillis());
        comment.setGmtModified(comment.getGmtCreate());
-       comment.setCommentor(1);
+       comment.setCommentor(user.getId());
        comment.setLikeCount(0);
        comment.setCommentCount(0);
        commentService.insert(comment,user);
